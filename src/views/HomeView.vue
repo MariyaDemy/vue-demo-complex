@@ -15,20 +15,20 @@
       <hr />
       <p>
         Original example at
-        <a target='blank' href='https://github.com/webix-hub/webix-vue'>
+        <a target="blank" href="https://github.com/webix-hub/webix-vue">
           github.com/webix-hub/webix-vue.
         </a>
       </p>
       <p>
         Vue JS integration documentation at
-        <a target='blank' href='https://docs.webix.com/desktop__vue.html'>
+        <a target="blank" href="https://docs.webix.com/desktop__vue.html">
           docs.webix.com/desktop__vue.html.
         </a>
       </p>
       <hr />
       <p>
         If you are planning to create an app with plenty of Webix widgets, check
-        <a target='blank' href='https://webix.gitbook.io/webix-jet/'>
+        <a target="blank" href="https://webix.gitbook.io/webix-jet/">
           Webix Jet
         </a>
         first.

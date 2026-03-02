@@ -1,5 +1,5 @@
 <script setup>
-import Gantt from '@/components/Gantt.vue';
+import Gantt from "@/components/Gantt.vue";
 </script>
 
 <template>

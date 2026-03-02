@@ -1,5 +1,5 @@
 <script setup>
-import { useTemplateRef, onMounted, onUnmounted } from 'vue';
+import { useTemplateRef, onMounted, onUnmounted } from "vue";
 
 import "@xbs/webix-pro/webix.css";
 import "@xbs/spreadsheet/spreadsheet.css";
@@ -9,7 +9,7 @@ let uiSheets = null;
 let resizeObserver = null;
 let resizeDelay = null;
 
-const props = defineProps(['data']);
+const props = defineProps(["data"]);
 
 onMounted(() => {
     const container = uiContainer.value;
