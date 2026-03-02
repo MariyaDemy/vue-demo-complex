@@ -1,5 +1,5 @@
 <script setup>
-import { useTemplateRef, onMounted, onUnmounted } from 'vue';
+import { useTemplateRef, onMounted, onUnmounted } from "vue";
 
 import "@xbs/webix-pro/webix.css";
 import "@xbs/gantt/codebase/gantt.css";

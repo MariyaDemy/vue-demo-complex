@@ -1,9 +1,9 @@
-import { fileURLToPath, URL } from 'node:url'
+import { fileURLToPath, URL } from "node:url";
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueDevTools from 'vite-plugin-vue-devtools'
-import inject from '@rollup/plugin-inject';
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import vueDevTools from "vite-plugin-vue-devtools";
+import inject from "@rollup/plugin-inject";
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,15 +12,15 @@ export default defineConfig({
     vueDevTools(),
     {
       ...inject({
-        webix: ['@xbs/webix-pro', '*'],
-        enforce: 'pre',
-        include: ['**/*.js', '**/*.vue']
+        webix: ["@xbs/webix-pro", "*"],
+        enforce: "pre",
+        include: ["**/*.js", "**/*.vue"]
       })
     },
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      "@": fileURLToPath(new URL("./src", import.meta.url))
     },
   },
   build: {
@@ -28,7 +28,7 @@ export default defineConfig({
     rollupOptions: {
       plugins: [
         inject({
-          webix: ['@xbs/webix-pro', '*'],
+          webix: ["@xbs/webix-pro", "*"],
         })
       ],
     }

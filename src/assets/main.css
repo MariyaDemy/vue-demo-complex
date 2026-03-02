@@ -1,4 +1,4 @@
-@import './base.css';
+@import "./base.css";
 
 #app {
   width:100%;
@@ -20,6 +20,10 @@ a {
 a.router-link-active {
   border-bottom: 4px solid #9661a3;
   transition: 0.4s;
+}
+
+.webix_view.webix_gantt {
+  border-width: 1px;
 }
 
 @media (hover: hover) {
