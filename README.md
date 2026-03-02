@@ -17,9 +17,8 @@ How to Start
 npm install
 npm run dev
 ```
-<br/>
-Open `http://localhost:5173/` to view the demo in the browser.
 
+Open `http://localhost:5173/` to view the demo in the browser.
 
 **Production build**
 
@@ -36,7 +35,7 @@ How to import and use a Complex Widget
 The minimum requirements to init the Gantt/Spreadsheet in a Vue app are
 - have a global Webix object  (it should be available *before* the component's sources are imported).
 Since there're two complex widgets in this demo, the global assignment was moved to `main.js`.
-- import the widget from "@xbs/gantt"`.
+- import the widget from `"@xbs/gantt"`.
 
 ```js
 import * as webix from "@xbs/webix-pro";
@@ -105,11 +104,12 @@ onMounted(() => {
 })
 ```
 
+
 Gantt and all Complex Widgets released since version 7.2 are SPA wrapped into Webix views (here's [an article](https://blog.webix.com/new-strategy-of-complex-widgets-why-webix-jet/) about their features).
 To be able to use all their features (including [customization of modules](https://docs.webix.com/gantt__customization.html)), these components should be imported with the following statements:
 
 ```
-import("@xbs/gantt").then((gantt) =>{...})
+import("@xbs/gantt").then((gantt) => {...})
 ```
 
 or
@@ -117,6 +117,7 @@ or
 ```
 import * as gantt from "@xbs/gantt";
 import "@xbs/spreadsheet";
+
 class CustomTree extends gantt.views.tree {...}
 ```
 
