@@ -12,32 +12,31 @@ let resizeDelay = null;
 onMounted(() => {
     const container = uiContainer.value;
 
-    webix.ready(() => {
-        import("@xbs/gantt").then((ganttModule) => {
-            const gantt = ganttModule.default || ganttModule ;
+    import("@xbs/gantt").then((ganttModule) => {
+        const gantt = ganttModule.default || ganttModule ;
 
-            appGantt = new gantt.App({
-                webix, // provide the global Webix scope
-                url: "https://docs.webix.com/gantt-backend/",
-		    });
+        appGantt = new gantt.App({
+            webix, // provide the global Webix scope
+            url: "https://docs.webix.com/gantt-backend/",
+		});
 
-            appGantt.render(container).then(() => {
-                resizeObserver = new ResizeObserver(() => {
-                    const view = appGantt.getRoot();
-                    if (view){
-                        clearTimeout(resizeDelay);
-                        resizeDelay = setTimeout(() => {
-                            view.adjust();
-                        }, 30);
-                    }
-                });
-                resizeObserver.observe(container);
+        appGantt.render(container).then(() => {
+            resizeObserver = new ResizeObserver(() => {
+                const view = appGantt.getRoot();
+                if (view){
+                    clearTimeout(resizeDelay);
+                    resizeDelay = setTimeout(() => {
+                        view.adjust();
+                    }, 30);
+                }
             });
-        })
+            resizeObserver.observe(container);
+        });
     })
 })
 
 onUnmounted(() => {
+    clearTimeout(resizeDelay);
     if(appGantt){
         if(appGantt.getRoot() && resizeObserver) resizeObserver.disconnect();
         appGantt.destructor();
