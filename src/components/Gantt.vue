@@ -12,34 +12,34 @@ let resizeDelay = null;
 onMounted(() => {
     const container = uiContainer.value;
 
-    webix.ready(() => {
-        import("@xbs/gantt").then((gantt) => {
+    import("@xbs/gantt").then((gantt) => {
 
-            uiGantt = webix.ui({
-                view: "gantt",
-                url: "https://docs.webix.com/gantt-backend/",
-                container
-		    });
+        uiGantt = webix.ui({
+            view: "gantt",
+            url: "https://docs.webix.com/gantt-backend/",
+            container
+		});
 
-            resizeObserver = new ResizeObserver(() => {
-                if (uiGantt){
-                    clearTimeout(resizeDelay);
-                    resizeDelay = setTimeout(() => {
-                        uiGantt.adjust();
-                    }, 30);
-                }
-            });
-            resizeObserver.observe(container);
-        })
+        resizeObserver = new ResizeObserver(() => {
+            if (uiGantt){
+                clearTimeout(resizeDelay);
+                resizeDelay = setTimeout(() => {
+                    uiGantt.adjust();
+                }, 30);
+            }
+        });
+        resizeObserver.observe(container);
     })
 })
 
 onUnmounted(() => {
+    clearTimeout(resizeDelay);
+    resizeObserver?.disconnect();
+
     if(uiGantt){
         uiGantt.destructor();
         uiGantt = null;
     }
-    resizeObserver.disconnect();
 })
 </script>
 

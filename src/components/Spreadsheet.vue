@@ -14,36 +14,36 @@ const props = defineProps(["data"]);
 onMounted(() => {
     const container = uiContainer.value;
 
-    webix.ready(() => {
-        import("@xbs/spreadsheet").then(() => {
+    import("@xbs/spreadsheet").then(() => {
 
-            uiSheets = webix.ui({
-                view: "spreadsheet",
-                toolbar: "full",
-                data: props.data,
-                container
-		    });
+        uiSheets = webix.ui({
+            view: "spreadsheet",
+            toolbar: "full",
+            data: props.data,
+            container
+		});
 
-            resizeObserver = new ResizeObserver(() => {
-                if (uiSheets){
-                    clearTimeout(resizeDelay);
-                    resizeDelay = setTimeout(() => {
-                        uiSheets.adjust();
-                    }, 30);
-                }
-            });
-            resizeObserver.observe(container);
+        resizeObserver = new ResizeObserver(() => {
+            if (uiSheets){
+                clearTimeout(resizeDelay);
+                resizeDelay = setTimeout(() => {
+                    uiSheets.adjust();
+                }, 30);
+            }
+        });
+        resizeObserver.observe(container);
 
-        })
     })
 })
 
 onUnmounted(() => {
+    clearTimeout(resizeDelay);
+    resizeObserver?.disconnect();
+
     if(uiSheets){
         uiSheets.destructor();
         uiSheets = null;
     }
-    resizeObserver.disconnect();
 })
 </script>
 

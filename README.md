@@ -6,7 +6,7 @@ By default, the demo shows how to initialize the [**Gantt**](https://webix.com/g
 
 Complex widgets are PRO components.<br/>By default, Webix, Spreadsheet, and Gantt are fetched from npm, so make sure you have signed in to our [private @xbs scope](https://docs.webix.com/desktop__install.html#installingwithnpm). <br/>
 **Note**: NPM always provides access to the latest versions of packages, so credentials are valid only while the license is active. <br/>
-Alternatively, you can remove these dependencies, include the "codebase" of Webix/Complex widget to your project, and import files using custom path. This can be done for **Trial** package as well (check [webix.com/download](https://webix.com/download/)).
+Alternatively, you can remove these dependencies, get the "codebase" from a Webix Core/Complex widget package and include the js files through a `<script>` in the index.html. This can be done for **Trial** package as well (check [webix.com/download](https://webix.com/download/)).
 
 The demo was bootstrapped with [create-vue](https://github.com/vuejs/create-vue).
 
