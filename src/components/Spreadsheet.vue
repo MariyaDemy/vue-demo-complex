@@ -1,45 +1,38 @@
 <script setup>
 import { useTemplateRef, onMounted, onUnmounted } from "vue";
+import { useResizeObserver } from "./composables/useResizeObserver.js";
 
 import "@xbs/webix-pro/webix.css";
 import "@xbs/spreadsheet/spreadsheet.css";
 
 const uiContainer = useTemplateRef("container");
 let uiSheets = null;
-let resizeObserver = null;
-let resizeDelay = null;
+let disposed = false;
+
+const { observeResize } = useResizeObserver();
 
 const props = defineProps(["data"]);
 
-onMounted(() => {
+onMounted(async () => {
     const container = uiContainer.value;
 
-    import("@xbs/spreadsheet").then(() => {
+    await import("@xbs/spreadsheet");
+    if (disposed || !container) return;
 
-        uiSheets = webix.ui({
-            view: "spreadsheet",
-            toolbar: "full",
-            data: props.data,
-            container
-		});
+    uiSheets = webix.ui({
+        view: "spreadsheet",
+        toolbar: "full",
+        data: props.data,
+        container
+	});
 
-        resizeObserver = new ResizeObserver(() => {
-            if (uiSheets){
-                clearTimeout(resizeDelay);
-                resizeDelay = setTimeout(() => {
-                    uiSheets.adjust();
-                }, 30);
-            }
-        });
-        resizeObserver.observe(container);
-
-    })
+    observeResize(container, () => {
+        if(uiSheets) uiSheets.adjust();
+    });
 })
 
 onUnmounted(() => {
-    clearTimeout(resizeDelay);
-    resizeObserver?.disconnect();
-
+    disposed = true;
     if(uiSheets){
         uiSheets.destructor();
         uiSheets = null;
@@ -53,7 +46,7 @@ onUnmounted(() => {
 
 <style scoped>
     .webix-container {
-        height: 70vh;
+        height: 75vh;
         width: 100%;
     }
 </style>

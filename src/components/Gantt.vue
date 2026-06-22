@@ -1,41 +1,35 @@
 <script setup>
 import { useTemplateRef, onMounted, onUnmounted } from "vue";
+import { useResizeObserver } from "./composables/useResizeObserver.js";
 
 import "@xbs/webix-pro/webix.css";
 import "@xbs/gantt/codebase/gantt.css";
 
 const uiContainer = useTemplateRef("container");
 let uiGantt = null;
-let resizeObserver = null;
-let resizeDelay = null;
+let disposed = false;
 
-onMounted(() => {
+const { observeResize } = useResizeObserver();
+
+onMounted(async () => {
     const container = uiContainer.value;
 
-    import("@xbs/gantt").then((gantt) => {
+    await import("@xbs/gantt");
+    if (disposed || !container) return;
 
-        uiGantt = webix.ui({
-            view: "gantt",
-            url: "https://docs.webix.com/gantt-backend/",
-            container
-		});
+    uiGantt = webix.ui({
+        view: "gantt",
+        url: "https://docs.webix.com/gantt-backend/",
+        container
+    });
 
-        resizeObserver = new ResizeObserver(() => {
-            if (uiGantt){
-                clearTimeout(resizeDelay);
-                resizeDelay = setTimeout(() => {
-                    uiGantt.adjust();
-                }, 30);
-            }
-        });
-        resizeObserver.observe(container);
-    })
+    observeResize(container, () => {
+        if(uiGantt) uiGantt.adjust();
+    });
 })
 
 onUnmounted(() => {
-    clearTimeout(resizeDelay);
-    resizeObserver?.disconnect();
-
+    disposed = true;
     if(uiGantt){
         uiGantt.destructor();
         uiGantt = null;
@@ -49,7 +43,7 @@ onUnmounted(() => {
 
 <style scoped>
     .webix-container {
-        height: 70vh;
+        height: 75vh;
         width: 100%;
     }
 </style>

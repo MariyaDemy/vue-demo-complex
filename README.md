@@ -44,16 +44,17 @@ window.webix = webix;
 
 ```js
 const uiContainer = useTemplateRef("container");
-onMounted(() => {
-    webix.ready(() => {
-        import("@xbs/gantt").then((gantt) => {
-            uiGantt = webix.ui({
-                view: "gantt",
-                url,
-                container: uiContainer.value,
-            });
-        })
-    })
+onMounted(async () => {
+    const container = uiContainer.value;
+
+    await import("@xbs/gantt");   
+    if (disposed || !container) return; 
+
+    uiGantt = webix.ui({
+        view: "gantt",
+        url,
+        container,
+    });    
 })
 ```
 
@@ -89,18 +90,17 @@ So that the webix will be available in all modules where necessary.
 
 ```js
 const uiContainer = useTemplateRef("container");
-onMounted(() => {
+onMounted(async () => {
     const container = uiContainer.value;
-    webix.ready(() => {
-        import("@xbs/gantt").then((ganttModule) => {
-            const gantt = ganttModule.default || ganttModule;
-            appGantt = new gantt.App({
-                webix, // provide the global Webix scope
-                url,
-            });
-            appGantt.render(container);
-        })
-    })
+
+    const gantt = await import("@xbs/gantt");   
+    if (disposed || !container) return;
+
+    appGantt = new gantt.App({
+        webix, // provide the global Webix scope
+        url,
+    });
+    appGantt.render(container);
 })
 ```
 
@@ -115,11 +115,17 @@ import("@xbs/gantt").then((gantt) => {...})
 or
 
 ```
-import * as gantt from "@xbs/gantt";
-import "@xbs/spreadsheet";
+// async 
+const gantt = await import("@xbs/gantt");  
+await import "@xbs/spreadsheet";
 
 class CustomTree extends gantt.views.tree {...}
 ```
+
+Requiremenets
+--------
+
+Node.js `^20.19.0` or `>=22.12.0`
 
 License
 --------
