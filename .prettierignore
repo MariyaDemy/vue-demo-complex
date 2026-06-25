@@ -1,0 +1,9 @@
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lockb
+
+# Build output / generated
+dist
+node_modules

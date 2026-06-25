@@ -1,15 +1,15 @@
-import "./assets/main.css";
+import './assets/main.css';
 
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "./router";
+import { createApp } from 'vue';
+import App from './App.vue';
+import router from './router';
 
 // hardcode a global variable ( required for complex widgets )
-import * as webix from "@xbs/webix-pro";
+import * as webix from '@xbs/webix-pro';
 window.webix = webix;
 
 webix.CustomScroll.init();
 
 const app = createApp(App);
 app.use(router);
-app.mount("#app");
+app.mount('#app');
