@@ -1,44 +1,38 @@
 <script setup>
 import { useTemplateRef, onMounted, onUnmounted } from "vue";
+import { useResizeObserver } from "./composables/useResizeObserver.js";
 
 import "@xbs/webix-pro/webix.css";
 import "@xbs/gantt/codebase/gantt.css";
 
 const uiContainer = useTemplateRef("container");
 let appGantt = null;
-let resizeObserver = null;
-let resizeDelay = null;
+let disposed = false;
 
-onMounted(() => {
+const { observeResize } = useResizeObserver();
+
+onMounted(async () => {
     const container = uiContainer.value;
 
-    import("@xbs/gantt").then((ganttModule) => {
-        const gantt = ganttModule.default || ganttModule ;
+    const gantt = await import("@xbs/gantt");   
+    if (disposed || !container) return; 
+    
+    appGantt = new gantt.App({
+        webix, // provide the global Webix scope
+        url: "https://docs.webix.com/gantt-backend/",
+	});
 
-        appGantt = new gantt.App({
-            webix, // provide the global Webix scope
-            url: "https://docs.webix.com/gantt-backend/",
-		});
-
-        appGantt.render(container).then(() => {
-            resizeObserver = new ResizeObserver(() => {
-                const view = appGantt.getRoot();
-                if (view){
-                    clearTimeout(resizeDelay);
-                    resizeDelay = setTimeout(() => {
-                        view.adjust();
-                    }, 30);
-                }
-            });
-            resizeObserver.observe(container);
+    appGantt.render(container).then(() => {
+        observeResize(container, () => {
+            const view = appGantt.getRoot();
+            if(view) view.adjust();
         });
-    })
+    });
 })
 
 onUnmounted(() => {
-    clearTimeout(resizeDelay);
+    disposed = true;
     if(appGantt){
-        if(appGantt.getRoot() && resizeObserver) resizeObserver.disconnect();
         appGantt.destructor();
         appGantt = null;
     }
@@ -51,7 +45,7 @@ onUnmounted(() => {
 
 <style scoped>
     .webix-container {
-        height: 70vh;
+        height: 75vh;
         width: 100%;
     }
 </style>

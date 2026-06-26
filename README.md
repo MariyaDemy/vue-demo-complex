@@ -44,16 +44,17 @@ window.webix = webix;
 
 ```js
 const uiContainer = useTemplateRef("container");
-onMounted(() => {
-    webix.ready(() => {
-        import("@xbs/gantt").then((gantt) => {
-            uiGantt = webix.ui({
-                view: "gantt",
-                url,
-                container: uiContainer.value,
-            });
-        })
-    })
+onMounted(async () => {
+    const container = uiContainer.value;
+
+    await import("@xbs/gantt");   
+    if (disposed || !container) return; 
+
+    uiGantt = webix.ui({
+        view: "gantt",
+        url,
+        container,
+    });
 })
 ```
 
@@ -65,24 +66,18 @@ The Spreadsheet and Kanban can be initialized in the same way as in the 1st opti
 
 In Vite configuration, add
 ```js
+    // use rollup inject plugin for the src files in dev mode
     plugins: [
-        //...other plugins
-        {
-        ...inject({
-                webix: ["@xbs/webix-pro", "*"],
-                enforce: "pre",
-                include: ["**/*.js", "**/*.vue"]
-            })
-        },
-    ],
-    build: { // duplicate for the build command
-        rollupOptions: {
-            plugins: [
-                inject({
-                    webix: ["@xbs/webix-pro", "*"],
-                })
-            ],
-        }
+        { ...inject({ webix: ["@xbs/webix-pro", "*"], include:["files to process"]})
+    }],
+    // use rollup inject plugin for the node_modules packages in dev mode
+    optimizeDeps: { rollupOptions: { plugins: [
+            inject({webix: ["@xbs/webix-pro", "*"]})
+        ]},
+    },
+    // use rolldown built-in feature inject for build mode
+    build: {
+        rolldownOptions: { transform: { inject: { webix: ["@xbs/webix-pro", "*"] } } },
     }
 ```
 So that the webix will be available in all modules where necessary.
@@ -91,16 +86,15 @@ So that the webix will be available in all modules where necessary.
 const uiContainer = useTemplateRef("container");
 onMounted(() => {
     const container = uiContainer.value;
-    webix.ready(() => {
-        import("@xbs/gantt").then((ganttModule) => {
-            const gantt = ganttModule.default || ganttModule;
-            appGantt = new gantt.App({
-                webix, // provide the global Webix scope
-                url,
-            });
-            appGantt.render(container);
-        })
-    })
+
+    const gantt = await import("@xbs/gantt");   
+    if (disposed || !container) return;
+
+    appGantt = new gantt.App({
+        webix, // and provide the global Webix scope here
+        url,
+    });
+    appGantt.render(container);
 })
 ```
 
@@ -115,11 +109,17 @@ import("@xbs/gantt").then((gantt) => {...})
 or
 
 ```
-import * as gantt from "@xbs/gantt";
-import "@xbs/spreadsheet";
+// async 
+const gantt = await import("@xbs/gantt");  
+await import "@xbs/spreadsheet";
 
 class CustomTree extends gantt.views.tree {...}
 ```
+
+Requirements
+--------
+
+Node.js `^20.19.0` or `>=22.12.0`
 
 License
 --------
