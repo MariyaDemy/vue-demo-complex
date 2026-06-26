@@ -1,0 +1,31 @@
+@import './base.css';
+
+#app {
+	width: 100%;
+	margin: auto;
+}
+
+h2 {
+	font-size: 34px;
+}
+
+a.router-link,
+a.link {
+	text-decoration: none;
+	color: hsla(160, 100%, 37%, 1);
+	transition: 0.4s;
+	padding: 3px;
+	border-bottom: 4px solid transparent;
+}
+
+a.router-link-active {
+	border-bottom: 4px solid #9661a3;
+	transition: 0.4s;
+}
+
+@media (hover: hover) {
+	a.router-link:hover,
+	a.link:hover {
+		background-color: hsla(160, 100%, 37%, 0.2);
+	}
+}
