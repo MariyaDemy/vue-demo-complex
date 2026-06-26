@@ -66,25 +66,19 @@ The Spreadsheet and Kanban can be initialized in the same way as in the 1st opti
 In Vite configuration, add
 
 ```js
-    plugins: [
-        //...other plugins
-        {
-        ...inject({
-                webix: ["@xbs/webix-pro", "*"],
-                enforce: "pre",
-                include: ["**/*.js", "**/*.vue"]
-            })
-        },
-    ],
-    build: { // duplicate for the build command
-        rollupOptions: {
-            plugins: [
-                inject({
-                    webix: ["@xbs/webix-pro", "*"],
-                })
-            ],
-        }
-    }
+// use rollup inject plugin for the src files in dev mode
+plugins: [
+    { ...inject({ webix: ["@xbs/webix-pro", "*"], include:["files to process"]})
+}],
+// use rollup inject plugin for the node_modules packages in dev mode
+optimizeDeps: { rollupOptions: { plugins: [
+        inject({webix: ["@xbs/webix-pro", "*"]})
+    ]},
+},
+// use rolldown built-in feature inject for build mode
+build: {
+    rolldownOptions: { transform: { inject: { webix: ["@xbs/webix-pro", "*"] } } },
+}
 ```
 
 So that the webix will be available in all modules where necessary.
@@ -98,7 +92,7 @@ onMounted(async () => {
 	if (disposed || !container) return;
 
 	appGantt = new gantt.App({
-		webix, // provide the global Webix scope
+		webix, // and provide the global Webix scope here
 		url
 	});
 	appGantt.render(container);
