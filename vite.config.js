@@ -22,17 +22,21 @@ export default defineConfig(({ command }) => {
 				// use rollup inject plugin for the src files in dev mode
 				...inject({
 					...webixInject,
-					include: [
-						'src/**/*.js',
-						'src/**/*.vue',
-						'node_modules/@xbs/gantt/**/*.js',
-						'node_modules/@xbs/spreadsheet/**/*.js'
-					]
+					include: ['src/**/*.js', 'src/**/*.vue']
 				})
 			}
 		].filter(Boolean),
 		// use rollup inject plugin for the node_modules packages in dev mode
-		optimizeDeps: { rollupOptions: { plugins: [inject({ ...webixInject })] } },
+		optimizeDeps: {
+			rollupOptions: {
+				plugins: [
+					inject({
+						...webixInject,
+						include: ['node_modules/@xbs/gantt/**/*.js', 'node_modules/@xbs/spreadsheet/**/*.js']
+					})
+				]
+			}
+		},
 		build: {
 			// use rolldown built-in inject feature for build mode
 			rolldownOptions: { transform: { inject: { ...webixInject } } },
